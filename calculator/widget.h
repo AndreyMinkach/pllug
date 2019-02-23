@@ -11,12 +11,23 @@ class Widget : public QWidget
 {
     Q_OBJECT
 
+
+
 public:
     explicit Widget(QWidget *parent = 0);
     ~Widget();
+    QSignalMapper *mapper() const;
+    void setMapper(QSignalMapper *mapper);
+
 private:
     void createWidget();
-
+private slots:
+    void slotClear();                 //Обробканатисканнякнопкискидання
+    void slotButtonPressed(int pNum); //Обробкацифровихкнопок
+    void slotPlusEqual();      //Обробкакнопкисумування/виведеннярезультат
+private:
+    int mSum; // Результат
+    int mNextNumber; //Наступнийдоданок
 private:
     QPushButton *pushButton;
     QPushButton *pushButton_2;
@@ -29,10 +40,14 @@ private:
     QPushButton *pushButton_9;
     QPushButton *pushButton_10;
 
+
+
     QPushButton *pushButtonPlus;
     QPushButton *pushButtonC;
     QLCDNumber *lcdNumber;
 
+private:
+    QSignalMapper *mMapper;
 
 };
 

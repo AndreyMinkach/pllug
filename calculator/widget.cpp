@@ -35,6 +35,70 @@ void Widget::createWidget()
  lCalcLayout->addWidget(pushButton_10,4,0, 1,3);
  lCalcLayout->addWidget(pushButtonC,1,3);
  lCalcLayout->addWidget(pushButtonPlus,2,3,3,1);
+
+ lcdNumber->setFixedHeight(50);
+
+ pushButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+ pushButton_2->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+ pushButton_3->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+ pushButton_4->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+ pushButton_5->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+ pushButton_6->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+ pushButton_7->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+ pushButton_8->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+ pushButton_9->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+ pushButton_10->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+ pushButtonC->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+ pushButtonPlus->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+ connect(pushButtonC, SIGNAL(clicked()), this, SLOT(slotClear()), Qt::UniqueConnection);
+ connect(pushButtonPlus, SIGNAL(clicked()), this, SLOT(slotPlusEqual()), Qt::UniqueConnection);
+ mMapper = new QSignalMapper(this);
+ mMapper->setMapping(pushButton, 1);
+ mMapper->setMapping(pushButton_2, 2);
+ mMapper->setMapping(pushButton_3, 3);
+ mMapper->setMapping(pushButton_4, 4);
+ mMapper->setMapping(pushButton_5, 5);
+ mMapper->setMapping(pushButton_6, 6);
+ mMapper->setMapping(pushButton_7, 7);
+ mMapper->setMapping(pushButton_8, 8);
+ mMapper->setMapping(pushButton_9, 9);
+ mMapper->setMapping(pushButton_10, 0);
+ connect(pushButton, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
+ connect(pushButton_2, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
+ connect(pushButton_3, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
+ connect(pushButton_4, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
+ connect(pushButton_5, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
+ connect(pushButton_6, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
+ connect(pushButton_7, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
+ connect(pushButton_8, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
+ connect(pushButton_9, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
+ connect(pushButton_10, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
+ connect(mMapper, SIGNAL(mapped(int)), this, SLOT(slotButtonPressed(int)), Qt::UniqueConnection);
+}
+
+void Widget::slotClear()
+{
+    lcdNumber->display(0);
+    mSum = 0;mNextNumber = 0;
+}
+void Widget::slotButtonPressed(int pNum)
+{
+    mNextNumber = pNum;lcdNumber->display(pNum);
+}
+void Widget::slotPlusEqual()
+{
+    mSum += mNextNumber;
+    lcdNumber->display(mSum);
+    mNextNumber = 0;
+}
+QSignalMapper *Widget::mapper() const
+{
+    return mMapper;
+}
+
+void Widget::setMapper(QSignalMapper *mapper)
+{
+    mMapper = mapper;
 }
 
 Widget::Widget(QWidget *parent)
@@ -44,6 +108,7 @@ Widget::Widget(QWidget *parent)
     setWindowTitle("Simple Calc");
     createWidget();
 }
+
 
 
 Widget::~Widget()
