@@ -62,12 +62,12 @@ static const uint qt_meta_data_Widget[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   44,    2, 0x08 /* Private */,
-       3,    1,   45,    2, 0x08 /* Private */,
-       5,    0,   48,    2, 0x08 /* Private */,
-       6,    0,   49,    2, 0x08 /* Private */,
-       7,    0,   50,    2, 0x08 /* Private */,
-       8,    0,   51,    2, 0x08 /* Private */,
+       1,    0,   44,    2, 0x0a /* Public */,
+       3,    1,   45,    2, 0x0a /* Public */,
+       5,    0,   48,    2, 0x0a /* Public */,
+       6,    0,   49,    2, 0x0a /* Public */,
+       7,    0,   50,    2, 0x0a /* Public */,
+       8,    0,   51,    2, 0x0a /* Public */,
 
  // slots: parameters
     QMetaType::Void,

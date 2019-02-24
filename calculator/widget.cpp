@@ -20,7 +20,13 @@ void Widget::createWidget()
  pushButton_9 = new QPushButton("9");
  pushButton_10 = new QPushButton("0");
  pushButtonC = new QPushButton("C");
- pushButtonPlus = new QPushButton("+/=");
+ pushButtonPlus = new QPushButton("+");
+ pushButtonMinus = new QPushButton("-");
+ pushButtonMult = new QPushButton("*");
+ pushButtonDivision = new QPushButton("/");
+
+
+
 
  lCalcLayout->addWidget(lcdNumber,0,0,1,4);
  lCalcLayout->addWidget(pushButton,1,0);
@@ -32,12 +38,23 @@ void Widget::createWidget()
  lCalcLayout->addWidget(pushButton_7,3,0);
  lCalcLayout->addWidget(pushButton_8,3,1);
  lCalcLayout->addWidget(pushButton_9,3,2);
- lCalcLayout->addWidget(pushButton_10,4,0, 1,3);
+ lCalcLayout->addWidget(pushButton_10,4,0);
  lCalcLayout->addWidget(pushButtonC,1,3);
- lCalcLayout->addWidget(pushButtonPlus,2,3,3,1);
+
+ lCalcLayout->addWidget(pushButtonPlus,2,3);
+
+ lCalcLayout->addWidget(pushButtonMinus,3,3);
+
+ lCalcLayout->addWidget(pushButtonMult,4,1);
+
+ lCalcLayout->addWidget(pushButtonDivision,4,2);
 
  lcdNumber->setFixedHeight(50);
-
+ connect(pushButtonC, SIGNAL(clicked()), this, SLOT(slotClear()), Qt::UniqueConnection);
+ connect(pushButtonPlus, SIGNAL(clicked()), this, SLOT(slotPlusEqual()), Qt::UniqueConnection);
+ connect(pushButtonMinus, SIGNAL(clicked()), this, SLOT(slotMinusEquel()), Qt::UniqueConnection);
+ connect(pushButtonDivision, SIGNAL(clicked()), this, SLOT(slotDivisionEquel()), Qt::UniqueConnection);
+ connect(pushButtonMult, SIGNAL(clicked()), this, SLOT(slotMultEquel()), Qt::UniqueConnection);
  pushButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
  pushButton_2->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
  pushButton_3->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
@@ -50,8 +67,12 @@ void Widget::createWidget()
  pushButton_10->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
  pushButtonC->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
  pushButtonPlus->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
- connect(pushButtonC, SIGNAL(clicked()), this, SLOT(slotClear()), Qt::UniqueConnection);
- connect(pushButtonPlus, SIGNAL(clicked()), this, SLOT(slotPlusEqual()), Qt::UniqueConnection);
+ pushButtonMinus->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+ pushButtonMult->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+ pushButtonDivision->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+
+
+
  mMapper = new QSignalMapper(this);
  mMapper->setMapping(pushButton, 1);
  mMapper->setMapping(pushButton_2, 2);
@@ -63,7 +84,7 @@ void Widget::createWidget()
  mMapper->setMapping(pushButton_8, 8);
  mMapper->setMapping(pushButton_9, 9);
  mMapper->setMapping(pushButton_10, 0);
- connect(pushButton, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
+ connect(pushButton,   SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
  connect(pushButton_2, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
  connect(pushButton_3, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
  connect(pushButton_4, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
@@ -72,29 +93,92 @@ void Widget::createWidget()
  connect(pushButton_7, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
  connect(pushButton_8, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
  connect(pushButton_9, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
- connect(pushButton_10, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
+ connect(pushButton_10, SIGNAL(clicked()),mMapper, SLOT(map()), Qt::UniqueConnection);
  connect(mMapper, SIGNAL(mapped(int)), this, SLOT(slotButtonPressed(int)), Qt::UniqueConnection);
+
+
 }
 
-void Widget::slotClear()
-{
-    lcdNumber->display(0);
-    mSum = 0;mNextNumber = 0;
-}
-void Widget::slotButtonPressed(int pNum)
-{
-    mNextNumber = pNum;lcdNumber->display(pNum);
-}
-void Widget::slotPlusEqual()
-{
-    mSum += mNextNumber;
-    lcdNumber->display(mSum);
-    mNextNumber = 0;
-}
 QSignalMapper *Widget::mapper() const
 {
     return mMapper;
 }
+void Widget::slotClear()
+{
+    lcdNumber->display(0);
+    mEnd = 0;mNextNumber = 0;
+}
+void Widget::slotButtonPressed(int pNum)
+{
+    mNextNumber = pNum;
+    lcdNumber->display(pNum);
+}
+void Widget::slotPlusEqual()
+{
+    mEnd += mNextNumber;
+    lcdNumber->display(mEnd);
+    mNextNumber = 0;
+}
+
+void Widget::slotMinusEqual()
+{
+    lcdNumber->display(0);
+    mEnd = 0;mNextNumber = 0;
+}
+
+void Widget::slotMultEqual()
+{
+    mEnd *= mNextNumber;
+    lcdNumber->display(mEnd);
+    mNextNumber = 0;
+}
+void Widget::slotDivisionEqual()
+{
+    mEnd /= mNextNumber;
+    lcdNumber->display(mEnd);
+    mNextNumber = 0;
+}
+
+QPushButton *Widget::getPushButtonMult() const
+{
+    return pushButtonMult;
+}
+
+void Widget::setPushButtonMult(QPushButton *value)
+{
+    pushButtonMult = value;
+}
+
+QPushButton *Widget::getPushButtonDivision() const
+{
+    return pushButtonDivision;
+}
+
+void Widget::setPushButtonDivision(QPushButton *value)
+{
+    pushButtonDivision = value;
+}
+
+QPushButton *Widget::getPushButtonMinus() const
+{
+    return pushButtonMinus;
+}
+
+void Widget::setPushButtonMinus(QPushButton *value)
+{
+    pushButtonMinus = value;
+}
+
+QPushButton *Widget::getPushButtonPlus() const
+{
+    return pushButtonPlus;
+}
+
+void Widget::setPushButtonPlus(QPushButton *value)
+{
+    pushButtonPlus = value;
+}
+
 
 void Widget::setMapper(QSignalMapper *mapper)
 {
