@@ -2,7 +2,7 @@
 #define WIDGET_H
 
 #include <QWidget>
-
+#include <QGridLayout>
 class QSignalMapper;
 class QPushButton;
 class QLCDNumber;
@@ -11,26 +11,11 @@ class Widget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Widget(QWidget *parent = 0);
+    explicit Widget(QWidget *parent = nullptr);
     ~Widget();
-    QSignalMapper *mapper() const;
-    void setMapper(QSignalMapper *mapper);
-
-    QPushButton *getPushButtonPlus() const;
-    void setPushButtonPlus(QPushButton *value);
-
-    QPushButton *getPushButtonMinus() const;
-    void setPushButtonMinus(QPushButton *value);
-
-    QPushButton *getPushButtonDivision() const;
-    void setPushButtonDivision(QPushButton *value);
-
-    QPushButton *getPushButtonMult() const;
-    void setPushButtonMult(QPushButton *value);
-
 private:
     void createWidget();
-public slots:
+private slots:
     void slotClear();
     void slotButtonPressed(int pNum);
     void slotPlusEqual();
@@ -41,7 +26,6 @@ private:
     int mEnd; // Результат
     int mNextNumber; //Наступнийдоданок
 
-private:
     QPushButton *pushButton;
     QPushButton *pushButton_2;
     QPushButton *pushButton_3;
@@ -58,11 +42,11 @@ private:
     QPushButton *pushButtonMinus;
     QPushButton *pushButtonPlus;
     QPushButton *pushButtonC;
+
     QLCDNumber *lcdNumber;
 
-private:
     QSignalMapper *mMapper;
-
+    QGridLayout *lCalcLayout;
 };
 
 

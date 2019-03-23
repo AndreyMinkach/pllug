@@ -5,8 +5,8 @@
 #include <QLCDNumber>
 void Widget::createWidget()
 {
- QGridLayout *lCalcLayout = new QGridLayout;
- setLayout(lCalcLayout);
+ lCalcLayout = new QGridLayout;
+ this->setLayout(lCalcLayout);
 
  lcdNumber = new QLCDNumber;
  pushButton = new QPushButton("1");
@@ -24,8 +24,6 @@ void Widget::createWidget()
  pushButtonMinus = new QPushButton("-");
  pushButtonMult = new QPushButton("*");
  pushButtonDivision = new QPushButton("/");
-
-
 
 
  lCalcLayout->addWidget(lcdNumber,0,0,1,4);
@@ -50,11 +48,7 @@ void Widget::createWidget()
  lCalcLayout->addWidget(pushButtonDivision,4,2);
 
  lcdNumber->setFixedHeight(50);
- connect(pushButtonC, SIGNAL(clicked()), this, SLOT(slotClear()), Qt::UniqueConnection);
- connect(pushButtonPlus, SIGNAL(clicked()), this, SLOT(slotPlusEqual()), Qt::UniqueConnection);
- connect(pushButtonMinus, SIGNAL(clicked()), this, SLOT(slotMinusEquel()), Qt::UniqueConnection);
- connect(pushButtonDivision, SIGNAL(clicked()), this, SLOT(slotDivisionEquel()), Qt::UniqueConnection);
- connect(pushButtonMult, SIGNAL(clicked()), this, SLOT(slotMultEquel()), Qt::UniqueConnection);
+
  pushButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
  pushButton_2->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
  pushButton_3->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
@@ -71,8 +65,6 @@ void Widget::createWidget()
  pushButtonMult->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
  pushButtonDivision->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 
-
-
  mMapper = new QSignalMapper(this);
  mMapper->setMapping(pushButton, 1);
  mMapper->setMapping(pushButton_2, 2);
@@ -84,6 +76,7 @@ void Widget::createWidget()
  mMapper->setMapping(pushButton_8, 8);
  mMapper->setMapping(pushButton_9, 9);
  mMapper->setMapping(pushButton_10, 0);
+
  connect(pushButton,   SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
  connect(pushButton_2, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
  connect(pushButton_3, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
@@ -94,15 +87,16 @@ void Widget::createWidget()
  connect(pushButton_8, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
  connect(pushButton_9, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
  connect(pushButton_10, SIGNAL(clicked()),mMapper, SLOT(map()), Qt::UniqueConnection);
+
  connect(mMapper, SIGNAL(mapped(int)), this, SLOT(slotButtonPressed(int)), Qt::UniqueConnection);
 
-
+ connect(pushButtonC, SIGNAL(clicked()), this, SLOT(slotClear()), Qt::UniqueConnection);
+ connect(pushButtonPlus, &QPushButton::clicked, this,Widget::slotPlusEqual());
+ connect(pushButtonMinus, SIGNAL(clicked()), this, SLOT(slotMinusEquel()), Qt::UniqueConnection);
+ connect(pushButtonDivision, SIGNAL(clicked()), this, SLOT(slotDivisionEquel()), Qt::UniqueConnection);
+ connect(pushButtonMult, SIGNAL(clicked()), this, SLOT(slotMultEquel()), Qt::UniqueConnection);
 }
 
-QSignalMapper *Widget::mapper() const
-{
-    return mMapper;
-}
 void Widget::slotClear()
 {
     lcdNumber->display(0);
@@ -123,7 +117,8 @@ void Widget::slotPlusEqual()
 void Widget::slotMinusEqual()
 {
     lcdNumber->display(0);
-    mEnd = 0;mNextNumber = 0;
+    mEnd = 0;
+    mNextNumber = 0;
 }
 
 void Widget::slotMultEqual()
@@ -137,52 +132,6 @@ void Widget::slotDivisionEqual()
     mEnd /= mNextNumber;
     lcdNumber->display(mEnd);
     mNextNumber = 0;
-}
-
-QPushButton *Widget::getPushButtonMult() const
-{
-    return pushButtonMult;
-}
-
-void Widget::setPushButtonMult(QPushButton *value)
-{
-    pushButtonMult = value;
-}
-
-QPushButton *Widget::getPushButtonDivision() const
-{
-    return pushButtonDivision;
-}
-
-void Widget::setPushButtonDivision(QPushButton *value)
-{
-    pushButtonDivision = value;
-}
-
-QPushButton *Widget::getPushButtonMinus() const
-{
-    return pushButtonMinus;
-}
-
-void Widget::setPushButtonMinus(QPushButton *value)
-{
-    pushButtonMinus = value;
-}
-
-QPushButton *Widget::getPushButtonPlus() const
-{
-    return pushButtonPlus;
-}
-
-void Widget::setPushButtonPlus(QPushButton *value)
-{
-    pushButtonPlus = value;
-}
-
-
-void Widget::setMapper(QSignalMapper *mapper)
-{
-    mMapper = mapper;
 }
 
 Widget::Widget(QWidget *parent)
